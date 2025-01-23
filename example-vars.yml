@@ -1,0 +1,10 @@
+---
+# GIT
+git_user: "{{ lookup('env', 'ANSIBLE_NET_USERNAME') }}"
+git_pwd: "{{ lookup('env', 'ANSIBLE_NET_PASSWORD') }}"
+# git_token: "{{ lookup('env', 'ANSIBLE_NET_PASSWORD') }}"
+git_branch: main
+git_user_email: amaseghe@redhat.com
+git_repo_name: network-devices-configs-backup-store
+git_repo_url: "https://{{ git_user }}:{{ git_pwd }}@gitlab.vodafone.com.au/redhat/{{ git_repo_name }}.git"
+...

@@ -1,0 +1,12 @@
+---
+# main file
+- name: Import isolate tasks
+  ansible.builtin.import_tasks: isolate.yml
+  when: _isolate_ | bool
+
+- name: Import normalize tasks
+  ansible.builtin.import_tasks: normalize.yml
+  when: _normalize_ | bool
+
+
+

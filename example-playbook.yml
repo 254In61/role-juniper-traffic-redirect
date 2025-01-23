@@ -1,0 +1,28 @@
+---
+- name: UPLOAD FILES TO GITLAB
+  hosts: localhost
+  gather_facts: false
+
+  pre_tasks:
+    - name: Include specific project variables
+      ansible.builtin.include_vars:
+        dir: group_vars
+      delegate_to: localhost
+
+  tasks:
+    - name: Upload files to gitlab - Import role-gitlab
+      ansible.builtin.import_role:
+        name: role-gitlab
+      vars:
+        git: true
+        lfs: false
+        file_upload: true
+        git_repo_name: "{{ git_repo_name }}"
+        git_sub_dir_path: "{{ vendor_dir }}/{{ target_host }}"
+        git_repo_url: "{{ git_repo_url }}"
+        git_user: "{{ git_user }}"
+        git_user_email: "{{ git_user_email }}"
+        local_git_repos_store: "{{ root_dir }}"
+        tmp_files_store: "{{ root_dir }}"
+      register: gitlab_upload
+...

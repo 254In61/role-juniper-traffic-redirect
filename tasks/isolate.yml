@@ -1,0 +1,17 @@
+---
+# Traffic isolation tasks
+# ==>  VRRP movement
+# - name: Import vrrp tasks
+#   ansible.builtin.import_tasks: vrrp.yml
+
+# # ==> Disable Southbound Interfaces
+# - name: Import southbound-interfaces tasks
+#   ansible.builtin.import_tasks: southbound-interfaces.yml
+
+# ==> OSPF traffic draining
+- name: Import ospf tasks
+  ansible.builtin.import_tasks: ospf.yml
+
+# ==> BGP traffic draining
+- name: Import bgp tasks
+  ansible.builtin.import_tasks: bgp.yml

@@ -1,0 +1,63 @@
+---
+# Run python script which builds the 2 files.
+- name: Set file paths
+  ansible.builtin.set_fact:
+    running_config: "{{ tmp_base_dir }}/{{ git_config_backup_subdir_path }}/{{ running_config_backup_file }}"
+    vrrp_isolate: "{{ tmp_base_dir }}/{{ git_traffic_redirect_subdir_path }}/{{ vrrp_isolation_config_file }}"
+    vrrp_normalize: "{{ tmp_base_dir }}/{{ git_traffic_redirect_subdir_path }}/{{ vrrp_normalization_config_file }}"
+  delegate_to: localhost
+
+- block:
+    - name: VRRP - Run scripts/build-vrrp-config.py to build interfaces list
+      ansible.builtin.command:
+        cmd: "python3 scripts/build-vrrp-config.py {{ running_config }} {{ vrrp_isolate }} {{ vrrp_normalize }}"
+
+    # upload config files to gitlab for records and re-use in traffic normalization
+    - name: Upload config files to git
+      ansible.builtin.include_role:
+        name: role-gitlab
+      vars:
+        _git_: true
+        _clone_: false  # clone down or not?.. Repo already cloned
+        _upload_: true  # git upload or not?.. Yes, upload needed in this task
+        _git_repo_: "{{ network_config_backup_gitlab_repo }}"
+        _git_repo_branch_: "{{ network_config_backup_gitlab_repo_branch }}"
+        _git_namespace_: "{{ gitlab_namespace }}"
+        _git_user_: "{{ gitlab_user }}"
+        _git_token_: "{{ gitlab_user_token }}"
+        _git_email_: "{{ gitlab_user_email }}"
+        _tmp_root_dir_: "{{ tmp_base_dir }}"
+        _remote_git_dir_: false
+        _local_file_path_: false
+
+  ignore_errors: true   
+  delegate_to: localhost
+  when: prep_config
+
+
+
+- name: VRRP - Generate vrrp commands in a list - isolate
+  ansible.builtin.set_fact:
+    vrrp_commands: "{{ lookup('file', '{{ vrrp_isolate }}').splitlines() }}"
+  delegate_to: localhost
+  when: isolate
+
+- name: VRRP - Generate vrrp commands in a list - normalize
+  ansible.builtin.set_fact:
+    vrrp_commands: "{{ lookup('file', '{{ vrrp_normalize }}').splitlines() }}"
+  delegate_to: localhost
+  when: normalize
+
+- name: VRRP - Display applied commands (for verification)
+  ansible.builtin.debug:
+    var: vrrp_commands
+  delegate_to: localhost
+
+# - name: VRRP - Implement vrrp traffic redirection
+#   junipernetworks.junos.junos_config:
+#     lines: "{{ vrrp_commands }}"
+#     comment: Implement vrrp traffic redirection
+#   ignore_errors: true
+#   when: traffic_movement
+    
+
