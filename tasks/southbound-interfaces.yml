@@ -1,76 +1,13 @@
 ---
-- name: Set file paths
-  ansible.builtin.set_fact:
-    running_config: "{{ tmp_base_dir }}/{{ git_config_backup_subdir_path }}/{{ running_config_backup_file }}"
-    show_intfcs: "{{ tmp_base_dir }}/{{ show_interface_terse_output_file }}"
-    enable_intfcs: "{{ tmp_base_dir }}/{{ git_traffic_redirect_subdir_path }}/{{ enable_interfaces_file }}"  
-    disable_intfcs: "{{ tmp_base_dir }}/{{ git_traffic_redirect_subdir_path }}/{{ disable_interfaces_file }}"
-  delegate_to: localhost
-
-- block:
-    - name: SOUTHBOUND INTERFACES - Collect current interfaces
-      junipernetworks.junos.junos_command: 
-        commands: show interfaces terse
-      register: show_interfaces_terse
-      ignore_errors: true
- 
-    - name: SOUTHBOUND INTERFACES - Ensure the output is properly formatted
-      ansible.builtin.set_fact:
-        formatted_output: "{{ show_interfaces_terse.stdout[0] | regex_replace('\r\n', '\n') }}"
-      delegate_to: localhost
-
-    - name: SOUTHBOUND INTERFACES - Save the output to the show_interface_terse_output_file
-      ansible.builtin.copy:
-        content: "{{ formatted_output }}"
-        dest: "{{ show_intfcs }}"
-      delegate_to: localhost
-
-    - name: SOUTHBOUND INTERFACES - Run scripts/build-interface-config.py to build config files
-      ansible.builtin.command:
-        cmd: "python3 scripts/build-interface-config.py {{ show_intfcs }} {{ running_config }} {{ enable_intfcs }} {{ disable_intfcs }}"
-      delegate_to: localhost
-
-    # upload config files to gitlab for records and re-use in traffic normalization
-    - name: Upload config files to git
-      ansible.builtin.include_role:
-        name: role-gitlab
-      vars:
-        _git_: true
-        _clone_: false     # clone down or not?.. Repo already cloned
-        _upload_: true     # git upload or not?.. Yes, upload needed in this task
-        _git_repo_: "{{ network_config_backup_gitlab_repo }}"
-        _git_repo_branch_: "{{ network_config_backup_gitlab_repo_branch }}"
-        _git_namespace_: "{{ gitlab_namespace }}"
-        _git_user_: "{{ gitlab_user }}"
-        _git_token_: "{{ gitlab_user_token }}"
-        _git_email_: "{{ gitlab_user_email }}"
-        _tmp_root_dir_: "{{ tmp_base_dir }}"
-        _remote_git_dir_: false
-        _local_file_path_: false
-  
-  ignore_errors: true  
-  when: prep_config
-
-- name: SOUTHBOUND INTERFACES - Create list of commands - isolate
-  ansible.builtin.set_fact:
-    cmds_list: "{{ lookup('file', '{{ disable_intfcs }}').splitlines() }}"
-  delegate_to: localhost
-  when: isolate
-
-- name: SOUTHBOUND INTERFACES - Create list of commands - normalize
-  ansible.builtin.set_fact:
-    cmds_list: "{{ lookup('file', '{{ enable_intfcs }}').splitlines() }}"
-  delegate_to: localhost
-  when: normalize
-
+# southbound interfaces traffic movement
 - name: SOUTHBOUND INTERFACES - Display applied commands (for verification)
   ansible.builtin.debug:
-    var: cmds_list
+    var: _interfaces_cmds_
   delegate_to: localhost
 
 # - name: Implement southbound interfaces traffic redirection
 #   junipernetworks.junos.junos_config:
-#     lines: "{{ cmds_list }}"
+#     lines: "{{ _interfaces_cmds_ }}"
 #     comment: Implement southbound interfaces traffic redirection
 #   ignore_errors: true
 #   when: traffic_movement

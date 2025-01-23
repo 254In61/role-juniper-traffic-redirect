@@ -1,17 +1,38 @@
 ---
-# Traffic isolation tasks
-# ==>  VRRP movement
-- name: Import vrrp tasks
-  ansible.builtin.import_tasks: vrrp.yml
+# traffic isolation tasks
 
-# # ==> Disable Southbound Interfaces
-# - name: Import southbound-interfaces tasks
-#   ansible.builtin.import_tasks: southbound-interfaces.yml
+# ==>  VRRP movement
+- name: Set vrrp commands and stage
+  ansible.builtin.set_fact:
+    _cmds_list_: "{{ _ospf_cmds_ }}"
+    _stage_: vrrp
+    
+- name: Import configure.yml tasks
+  ansible.builtin.import_tasks: configure.yml
+ 
+# ==> Disable Southbound Interfaces
+- name: Set southbound interfaces commands and stage
+  ansible.builtin.set_fact:
+    _cmds_list_: "{{ _interfaces_cmds_ }}"
+    _stage_: southbound-interfaces
+    
+- name: Import configure.yml tasks
+  ansible.builtin.import_tasks: configure.yml
 
 # ==> OSPF traffic draining
-- name: Import ospf tasks
-  ansible.builtin.import_tasks: ospf.yml
+- name: Set OSPF traffic draining commands and stage
+  ansible.builtin.set_fact:
+    _cmds_list_: "{{ _ospf_cmds_ }}"
+    _stage_: ospf
+    
+- name: Import configure.yml tasks
+  ansible.builtin.import_tasks: configure.yml
 
 # ==> BGP traffic draining
-- name: Import bgp tasks
-  ansible.builtin.import_tasks: bgp.yml
+- name: Set BGP traffic draining commands and stage
+  ansible.builtin.set_fact:
+    _cmds_list_: "{{ _bgp_cmds_ }}"
+    _stage_: bgp
+    
+- name: Import configure.yml tasks
+  ansible.builtin.import_tasks: configure.yml

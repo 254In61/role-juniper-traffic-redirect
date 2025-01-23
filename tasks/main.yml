@@ -1,33 +1,12 @@
 ---
-# main file
-# - name: Import isolate tasks
-#   ansible.builtin.import_tasks: isolate.yml
-#   when: _isolate_ | bool
+# Main tasks
+- name: Import isolate.yml tasks
+  ansible.builtin.import_tasks: isolate.yml
+  when: _isolate_
 
-# - name: Import normalize tasks
-#   ansible.builtin.import_tasks: normalize.yml
-#   when: _normalize_ | bool
-
-
-
-# Traffic isolation tasks
-- block:
-    # ==>  VRRP movement
-    - name: Import vrrp tasks
-      ansible.builtin.import_tasks: vrrp.yml
-
-    # # ==> Disable Southbound Interfaces
-    # - name: Import southbound-interfaces tasks
-    #   ansible.builtin.import_tasks: southbound-interfaces.yml
-
-    # ==> OSPF traffic draining
-    - name: Import ospf tasks
-      ansible.builtin.import_tasks: ospf.yml
-
-    # ==> BGP traffic draining
-    - name: Import bgp tasks
-      ansible.builtin.import_tasks: bgp.yml
-  when: _isolate_ 
+- name: Import normalize.yml tasks
+  ansible.builtin.import_tasks: normalize.yml
+  when: _normalize_ 
 
 
 
