@@ -1,21 +1,12 @@
 ---
-- name: BGP - Set commands list - isolation
-  ansible.builtin.set_fact:
-    bgp_cmds_list: "{{ bgp_isolation_cmds_list }}"
-  when: isolate
-
-- name: BGP - Set commands list - isolation
-  ansible.builtin.set_fact:
-    bgp_cmds_list: "{{ bgp_normalization_cmds_list }}"
-  when: normalize
-
+# BGP tasks
 - name: BGP - Display applied commands (for verification)
   ansible.builtin.debug:
-    var: bgp_cmds_list
+    var: _bgp_cmds_
   delegate_to: localhost
 
 # - name: Implement bgp traffic redirection
 #   junipernetworks.junos.junos_config:
-#     lines: "{{ bgp_cmds_list }}"
+#     lines: "{{ _bgp_cmds_ }}"
 #     comment: Implement bgp traffic redirection
 #   ignore_errors: true

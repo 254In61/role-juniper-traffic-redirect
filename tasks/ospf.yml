@@ -1,22 +1,13 @@
 ---
-- name: OSPF - Set commands list - isolation
-  ansible.builtin.set_fact:
-    ospf_cmds_list: "{{ ospf_isolation_cmds_list }}"
-  when: isolate
-
-- name: OSPF - Set commands list - isolation
-  ansible.builtin.set_fact:
-    ospf_cmds_list: "{{ ospf_normalization_cmds_list }}"
-  when: normalize
-
+# OSPF Tasks
 - name: OSPF - Display applied commands (for verification)
   ansible.builtin.debug:
-    var: ospf_cmds_list
+    var: _ospf_cmds_
   delegate_to: localhost
 
 # - name: Implement ospf traffic redirection
 #   junipernetworks.junos.junos_config:
-#     lines: "{{ ospf_cmds_list }}"
+#     lines: "{{ _ospf_cmds_ }}"
 #     comment: implement ospf traffic redirection
 #   ignore_errors: true
 
