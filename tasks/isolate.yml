@@ -1,8 +1,8 @@
 ---
 # Traffic isolation tasks
 # ==>  VRRP movement
-# - name: Import vrrp tasks
-#   ansible.builtin.import_tasks: vrrp.yml
+- name: Import vrrp tasks
+  ansible.builtin.import_tasks: vrrp.yml
 
 # # ==> Disable Southbound Interfaces
 # - name: Import southbound-interfaces tasks
