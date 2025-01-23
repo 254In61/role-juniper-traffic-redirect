@@ -1,11 +1,11 @@
 ---
 # traffic isolation tasks
 
-# ==>  VRRP movement
+# ==>  VRRP traffic draining
 - name: Set vrrp commands and stage
   ansible.builtin.set_fact:
     _cmds_list_: "{{ _vrrp_cmds_ }}"
-    _stage_: vrrp
+    _stage_: vrrp-isolation
     
 - name: Import apply-config.yml tasks
   ansible.builtin.import_tasks: apply-config.yml
@@ -14,7 +14,7 @@
 - name: Set southbound interfaces commands and stage
   ansible.builtin.set_fact:
     _cmds_list_: "{{ _interfaces_cmds_ }}"
-    _stage_: southbound-interfaces
+    _stage_: southbound-interfaces-isolation
     
 - name: Import apply-config.yml tasks
   ansible.builtin.import_tasks: apply-config.yml
@@ -23,7 +23,7 @@
 - name: Set OSPF traffic draining commands and stage
   ansible.builtin.set_fact:
     _cmds_list_: "{{ _ospf_cmds_ }}"
-    _stage_: ospf
+    _stage_: ospf-isolation
     
 - name: Import apply-config.yml tasks
   ansible.builtin.import_tasks: apply-config.yml
@@ -32,7 +32,7 @@
 - name: Set BGP traffic draining commands and stage
   ansible.builtin.set_fact:
     _cmds_list_: "{{ _bgp_cmds_ }}"
-    _stage_: bgp
+    _stage_: bgp-isolation
     
 - name: Import apply-config.yml tasks
   ansible.builtin.import_tasks: apply-config.yml

@@ -1,2 +1,38 @@
 --- 
 # traffic normalization tasks
+
+# ==> BGP traffic normalization
+- name: Set BGP traffic normalization commands and stage
+  ansible.builtin.set_fact:
+    _cmds_list_: "{{ _bgp_cmds_ }}"
+    _stage_: bgp-normalization
+    
+- name: Import apply-config.yml tasks
+  ansible.builtin.import_tasks: apply-config.yml
+
+# ==> OSPF traffic normalization
+- name: Set OSPF traffic normalization commands and stage
+  ansible.builtin.set_fact:
+    _cmds_list_: "{{ _ospf_cmds_ }}"
+    _stage_: ospf-normalization
+    
+- name: Import apply-config.yml tasks
+  ansible.builtin.import_tasks: apply-config.yml
+
+# ==> Enable Southbound Interfaces
+- name: Set southbound interfaces commands and stage
+  ansible.builtin.set_fact:
+    _cmds_list_: "{{ _interfaces_cmds_ }}"
+    _stage_: southbound-interfaces-normalization
+    
+- name: Import apply-config.yml tasks
+  ansible.builtin.import_tasks: apply-config.yml
+
+# ==>  VRRP traffic normalization
+- name: Set vrrp commands and stage
+  ansible.builtin.set_fact:
+    _cmds_list_: "{{ _vrrp_cmds_ }}"
+    _stage_: vrrp-normalization
+    
+- name: Import apply-config.yml tasks
+  ansible.builtin.import_tasks: apply-config.yml
