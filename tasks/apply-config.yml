@@ -1,11 +1,11 @@
 ---
 # Configure device
-- name: Display applied commands (for verification)
+- name: "Display command for - {{ stage }}"
   ansible.builtin.debug:
     var: _cmds_list_
   delegate_to: localhost
 
-# - name: Configure device
+# - name: "Apply configuration changes - {{ stage }}"
 #   junipernetworks.junos.junos_config:
 #     lines: "{{ _cmds_list_ }}"
 #     comment: "implementing {{ stage }} traffic redirection"
