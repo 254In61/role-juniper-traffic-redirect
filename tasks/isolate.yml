@@ -6,6 +6,8 @@
   ansible.builtin.set_fact:
     _cmds_list_: "{{ _vrrp_cmds_ }}"
     _stage_: vrrp-isolation
+  ignore_errors: true
+  delegate_to: localhost
     
 - name: Import apply-config.yml tasks
   ansible.builtin.import_tasks: apply-config.yml
@@ -15,7 +17,9 @@
   ansible.builtin.set_fact:
     _cmds_list_: "{{ _interfaces_cmds_ }}"
     _stage_: southbound-interfaces-isolation
-    
+  ignore_errors: true
+  delegate_to: localhost
+
 - name: Import apply-config.yml tasks
   ansible.builtin.import_tasks: apply-config.yml
 
@@ -24,6 +28,8 @@
   ansible.builtin.set_fact:
     _cmds_list_: "{{ _ospf_cmds_ }}"
     _stage_: ospf-isolation
+  ignore_errors: true
+  delegate_to: localhost
     
 - name: Import apply-config.yml tasks
   ansible.builtin.import_tasks: apply-config.yml
@@ -33,6 +39,8 @@
   ansible.builtin.set_fact:
     _cmds_list_: "{{ _bgp_cmds_ }}"
     _stage_: bgp-isolation
+  ignore_errors: true
+  delegate_to: localhost
     
 - name: Import apply-config.yml tasks
   ansible.builtin.import_tasks: apply-config.yml

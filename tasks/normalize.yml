@@ -6,6 +6,8 @@
   ansible.builtin.set_fact:
     _cmds_list_: "{{ _bgp_cmds_ }}"
     _stage_: bgp-normalization
+  ignore_errors: true
+  delegate_to: localhost
     
 - name: Import apply-config.yml tasks
   ansible.builtin.import_tasks: apply-config.yml
@@ -15,6 +17,8 @@
   ansible.builtin.set_fact:
     _cmds_list_: "{{ _ospf_cmds_ }}"
     _stage_: ospf-normalization
+  ignore_errors: true
+  delegate_to: localhost
     
 - name: Import apply-config.yml tasks
   ansible.builtin.import_tasks: apply-config.yml
@@ -24,6 +28,8 @@
   ansible.builtin.set_fact:
     _cmds_list_: "{{ _interfaces_cmds_ }}"
     _stage_: southbound-interfaces-normalization
+  ignore_errors: true
+  delegate_to: localhost
     
 - name: Import apply-config.yml tasks
   ansible.builtin.import_tasks: apply-config.yml
@@ -33,6 +39,8 @@
   ansible.builtin.set_fact:
     _cmds_list_: "{{ _vrrp_cmds_ }}"
     _stage_: vrrp-normalization
+  ignore_errors: true
+  delegate_to: localhost
     
 - name: Import apply-config.yml tasks
   ansible.builtin.import_tasks: apply-config.yml

@@ -4,6 +4,7 @@
   ansible.builtin.debug:
     var: _cmds_list_
   delegate_to: localhost
+  ignore_erros: true
 
 # - name: "Apply configuration changes - {{ stage }}"
 #   junipernetworks.junos.junos_config:
