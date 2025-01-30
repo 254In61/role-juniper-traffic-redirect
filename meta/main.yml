@@ -1,6 +1,6 @@
 galaxy_info:
   author: Allan Maseghe
-  description: perfoming of tasks in gitlab/github
+  description: redirecting traffic from Juniper router during software upgrade or HW replacement
   company: Red Hat
 
   license: license (GPL-2.0-or-later, MIT, etc)
@@ -8,8 +8,10 @@ galaxy_info:
   min_ansible_version: 2.11
 
   galaxy_tags:
-    - gitlab
-    - github
+    - juniper
+    - junos
+    - redirect
+    - traffic
     
 dependencies: []
   # List your role dependencies here, one per line. Be sure to remove the '[]' above,
