@@ -5,6 +5,12 @@
     var: _cmds_list_
   delegate_to: localhost
 
+- name: Clear possible commit lock
+  junipernetworks.junos.junos_command:
+    commands:
+      - clear system commit
+  ignore_errors: true
+
 - name: "Apply configuration changes - {{ _stage_ }}"
   junipernetworks.junos.junos_config:
     lines: "{{ _cmds_list_ }}"
